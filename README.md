@@ -1,4 +1,4 @@
-Llama Assistant for M1
+## Llama Assistant for M1
 
 ## Why?
 
