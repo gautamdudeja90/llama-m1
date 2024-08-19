@@ -1,4 +1,3 @@
-
 import time
 from string import Template
 
@@ -16,7 +15,7 @@ llm = Llama.from_pretrained(
 controller = Controller()
 
 FIX_PROMPT_TEMPLATE = Template(
-    """Fix all typos and casing and punctuation in this text, but preserve all new line characters:
+    """Fix all typos and casing and punctuation in this text, rephrase text to make it cohesive but preserve all new line characters:
 
 $text
 
@@ -59,7 +58,6 @@ def translate_text(text):
     print(output)
     return output["choices"][0]["message"]["content"].strip()
 
-
 def fix_current_line(usecase="fix"):
     # macOS short cut to select current line: Cmd+Shift+Left
     controller.press(Key.cmd)
@@ -74,7 +72,6 @@ def fix_current_line(usecase="fix"):
         fix_selection(usecase="fix")
     elif usecase == "translate":
         fix_selection(usecase="translate")
-
 
 def fix_selection(usecase="fix"):
     # 1. Copy selection to clipboard
@@ -96,11 +93,11 @@ def fix_selection(usecase="fix"):
     if not fixed_text:
         return
 
-    # 4. Paste the fixed string to the clipboard
+    # 4. Paste the fixed string directly, replacing the selected text
     pyperclip.copy(fixed_text)
     time.sleep(0.1)
-
-    # 5. Paste the clipboard and replace the selected text
+    
+    # 5. Simulate pressing Cmd+V to paste the fixed text
     with controller.pressed(Key.cmd):
         controller.tap("v")
 
@@ -109,7 +106,6 @@ def on_f9():
 
 def on_f10():
     fix_selection(usecase="translate")
-
 
 with keyboard.GlobalHotKeys({"<101>": on_f9, "<109>": on_f10}) as h:
     h.join()
